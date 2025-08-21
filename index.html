@@ -4,9 +4,11 @@
     <meta charset="UTF-8" />
     <script>
       const links = [
-        "https://api.whatsapp.com/send?phone=9647844887424&text=السلام%20عليكم"
+        "https://api.whatsapp.com/send?phone=9647844887424&text=السلام%20عليكم",
+        "https://api.whatsapp.com/send?phone=9647858704489&text=السلام%20عليكم"
       ];
-      window.location.href = links[0];
+      const randomIndex = Math.floor(Math.random() * links.length);
+      window.location.href = links[randomIndex];
     </script>
     <title>جاري تحويلك إلى واتساب...</title>
   </head>
