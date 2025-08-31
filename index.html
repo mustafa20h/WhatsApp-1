@@ -7,8 +7,21 @@
         "https://api.whatsapp.com/send?phone=9647844887424&text=السلام%20عليكم",
         "https://api.whatsapp.com/send?phone=9647858704489&text=السلام%20عليكم"
       ];
-      const randomIndex = Math.floor(Math.random() * links.length);
-      window.location.href = links[randomIndex];
+
+      // نجيب آخر اندكس من التخزين المحلي
+      let lastIndex = localStorage.getItem("lastIndex");
+
+      if (lastIndex === null) {
+        lastIndex = 0;
+      } else {
+        lastIndex = (parseInt(lastIndex) + 1) % links.length;
+      }
+
+      // نخزن القيمة الجديدة
+      localStorage.setItem("lastIndex", lastIndex);
+
+      // نحول المستخدم للرابط بالدور
+      window.location.href = links[lastIndex];
     </script>
     <title>جاري تحويلك إلى واتساب...</title>
   </head>
