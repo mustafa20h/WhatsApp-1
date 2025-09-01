@@ -8,20 +8,35 @@
         "https://api.whatsapp.com/send?phone=9647858704489&text=السلام%20عليكم"
       ];
 
-      // نجيب آخر اندكس من التخزين المحلي
-      let lastIndex = localStorage.getItem("lastIndex");
-
-      if (lastIndex === null) {
-        lastIndex = 0;
-      } else {
-        lastIndex = (parseInt(lastIndex) + 1) % links.length;
+      // تجيب قيمة باراميتر من الرابط
+      function getParam(name) {
+        const p = new URLSearchParams(location.search);
+        return p.get(name);
       }
 
-      // نخزن القيمة الجديدة
-      localStorage.setItem("lastIndex", lastIndex);
+      // دالّة هاش تبسّط التوزيع
+      function hashString(str) {
+        let h = 0;
+        for (let i = 0; i < str.length; i++) {
+          h = (h * 31 + str.charCodeAt(i)) | 0;
+        }
+        return Math.abs(h);
+      }
 
-      // نحول المستخدم للرابط بالدور
-      window.location.href = links[lastIndex];
+      // نستخدم ttclid من TikTok إذا موجود
+      const clickId = getParam("ttclid");
+      let index;
+
+      if (clickId) {
+        // توزيع متساوي عالمي حسب النقرات
+        index = hashString(clickId) % links.length;
+      } else {
+        // احتياط: توزيع عشوائي
+        index = Math.floor(Math.random() * links.length);
+      }
+
+      // نحول المستخدم
+      window.location.href = links[index];
     </script>
     <title>جاري تحويلك إلى واتساب...</title>
   </head>
