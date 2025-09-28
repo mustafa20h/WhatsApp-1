@@ -2,70 +2,40 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>جاري تحويلك إلى واتساب...</title>
-    <style>
-      body {font-family: system-ui, -apple-system, Arial; text-align:center; padding:32px;}
-      a, button {font-size:18px; padding:12px 20px; border:0; border-radius:8px; cursor:pointer;}
-      .btn {background:#25D366; color:#fff; display:inline-block; text-decoration:none; margin-top:12px;}
-      .hint {color:#666; font-size:14px; margin-top:8px;}
-    </style>
     <script>
       const links = [
-        "https://api.whatsapp.com/send?phone=9647844887424&text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85",
-        "https://api.whatsapp.com/send?phone=9647859067078&text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85",
-        "https://api.whatsapp.com/send?phone=9647833301709&text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85",
-        "https://api.whatsapp.com/send?phone=9647833301727&text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85"
+        "https://api.whatsapp.com/send?phone=9647844887424&text=السلام%20عليكم",
+        "https://api.whatsapp.com/send?phone=9647859067078&text=السلام%20عليكم",
+        "https://api.whatsapp.com/send?phone=9647833301709&text=السلام%20عليكم",
+        "https://api.whatsapp.com/send?phone=9647833301727&text=السلام%20عليكم"
       ];
 
-      function getParam(name){
+      // نوزع باستخدام ttclid إذا موجود (أعلانات TikTok)
+      function getParam(name) {
         const p = new URLSearchParams(location.search);
         return p.get(name);
       }
-      function hashString(str){
+      function hashString(str) {
         let h = 0;
-        for (let i=0; i<str.length; i++){ h = (h*31 + str.charCodeAt(i)) | 0; }
+        for (let i = 0; i < str.length; i++) {
+          h = (h * 31 + str.charCodeAt(i)) | 0;
+        }
         return Math.abs(h);
       }
-      function pickLink(){
-        const clickId = getParam("ttclid") || getParam("fbclid") || getParam("gclid");
-        if (clickId) return links[ hashString(clickId) % links.length ];
-        // احتياط: دور محلي إذا ماكو معرّف نقرة
-        try {
-          let last = localStorage.getItem("lastIndex");
-          if (last === null) last = 0; else last = (parseInt(last)+1) % links.length;
-          localStorage.setItem("lastIndex", last);
-          return links[last];
-        } catch(_) {
-          return links[Math.floor(Math.random()*links.length)];
-        }
+
+      const clickId = getParam("ttclid");
+      let index;
+      if (clickId) {
+        index = hashString(clickId) % links.length;
+      } else {
+        index = Math.floor(Math.random() * links.length);
       }
 
-      const targetLink = pickLink();
-
-      function tryRedirect(){
-        // المحاولة الرئيسية
-        try { window.location.replace(targetLink); } catch(e){}
-        // إعادة محاولة بعد 400ms
-        setTimeout(function(){
-          if (!document.hidden) {
-            try { window.location.href = targetLink; } catch(e){}
-          }
-        }, 400);
-        // تحديث الزر والرابط اليدوي
-        document.getElementById('manualBtn').onclick = () => window.location.href = targetLink;
-        document.getElementById('manualLink').href = targetLink;
-      }
-
-      window.addEventListener('load', tryRedirect);
+      // تحويل مباشر
+      window.location.replace(links[index]);
     </script>
+    <title>واتساب</title>
   </head>
   <body>
-    <h3>جارٍ تحويلك إلى واتساب…</h3>
-    <a id="manualLink" class="btn" rel="noopener">افتح واتساب الآن</a>
-    <div class="hint">إذا لم يتم التحويل تلقائيًا خلال لحظات، اضغط الزر.</div>
-    <div style="margin-top:10px;">
-      <button id="manualBtn" class="btn">فتح يدوي</button>
-    </div>
   </body>
 </html>
